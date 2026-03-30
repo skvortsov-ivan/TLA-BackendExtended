@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TLA_BackendExtended</RootNamespace>
+    <UserSecretsId>b6207bdc-93f4-47f3-9aa5-00fcdcb1be60</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
