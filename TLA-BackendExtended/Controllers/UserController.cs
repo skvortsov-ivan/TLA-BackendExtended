@@ -1,7 +1,8 @@
-﻿using TLA_BackendExtended.Services;
-using TLA_BackendExtended.DTOs;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using TLA_BackendExtended.DTOs;
+using TLA_BackendExtended.Services;
 
 namespace TLA_BackendExtended.Controllers
 {
@@ -15,7 +16,9 @@ namespace TLA_BackendExtended.Controllers
         {
             _userService = userService;
         }
+
         // Creates a new user
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
