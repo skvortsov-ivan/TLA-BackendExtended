@@ -1,4 +1,6 @@
-﻿using TLA_BackendExtended.Models;
+﻿using System.Runtime.InteropServices;
+using TLA_BackendExtended.Exceptions;
+using TLA_BackendExtended.Models;
 
 namespace TLA_BackendExtended.Services
 {
@@ -6,11 +8,11 @@ namespace TLA_BackendExtended.Services
     {
         private static readonly List<User> _users = new();
 
-        public async Task<User> CreateUserAsync(string username, string password, int age, int weight, string location, bool darkMode)
+        // Create a user
+        public Task<User> CreateUserAsync(string username, string password, int age, int weight, string location, bool darkMode)
         {
-            // Check if user exists
             if (_users.Any(u => u.Username.Equals(username)))
-                throw new Exception($"User '{username}' already exists.");
+                throw new UserAlreadyExistsException($"User '{username}' already exists.");
 
             var user = new User
             {
@@ -19,11 +21,69 @@ namespace TLA_BackendExtended.Services
                 Age = age,
                 Weight = weight,
                 Location = location,
-                DarkMode = darkMode
+                DarkMode = darkMode,
+                CreatedAt = DateTime.Now
             };
 
             _users.Add(user);
             return Task.FromResult(user);
+        }
+
+        // Find a user
+        public Task<User> GetUserAsync(string username)
+        {
+            var user = _users.FirstOrDefault(u => u.Username.Equals(username));
+
+            if (user == null)
+                throw new UserNotFoundException($"User '{username}' not found.");
+
+            return Task.FromResult(user);
+        }
+
+        // Update user info
+        public Task<User> UpdateUserAsync(string username, string password, int age, int weight, string location)
+        {
+            var user = _users.FirstOrDefault(u => u.Username.Equals(username));
+
+            if (user == null)
+                throw new UserNotFoundException($"User '{username}' not found.");
+
+            user.Password = password;
+            user.Age = age;
+            user.Weight = weight;
+            user.Location = location;
+
+            return Task.FromResult(user);
+        }
+
+        // Update dark mode
+        public Task<User> UpdateColourModeAsync(string username, bool darkMode)
+        {
+            var user = _users.FirstOrDefault(u => u.Username.Equals(username));
+
+            if (user == null)
+                throw new UserNotFoundException($"User '{username}' not found.");
+
+            user.DarkMode = darkMode;
+            return Task.FromResult(user);
+        }
+
+        // Delete a user
+        public Task DeleteUserAsync(string username)
+        {
+            var user = _users.FirstOrDefault(u => u.Username.Equals(username));
+
+            if (user == null)
+                throw new UserNotFoundException($"User '{username}' not found.");
+
+            _users.Remove(user);
+            return Task.CompletedTask;
+        }
+
+        // Return all users
+        public Task<List<User>> GetAllUsersAsync()
+        {
+            return Task.FromResult(_users.ToList());
         }
     }
 }

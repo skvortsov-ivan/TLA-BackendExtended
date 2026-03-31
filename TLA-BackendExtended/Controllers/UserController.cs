@@ -15,12 +15,66 @@ namespace TLA_BackendExtended.Controllers
         {
             _userService = userService;
         }
-        // Adds a new user
+        // Creates a new user
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
-            var entry = await _userService.CreateUserAsync(request.UserName, request.Password, request.Age, request.Weight, request.Location, request.DarkMode);
-            return Ok(entry);
+            var user = await _userService.CreateUserAsync(
+                request.Username,
+                request.Password,
+                request.Age,
+                request.Weight,
+                request.Location,
+                request.DarkMode
+            );
+
+            return Ok(user);
+        }
+        // Get a user by username
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetUser(string username)
+        {
+            var user = await _userService.GetUserAsync(username);
+
+            return Ok(user);
+        }
+        // Get all users
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        // Update user info
+        [HttpPut("{username}")]
+        public async Task<IActionResult> UpdateUser(string username, [FromBody] UpdateUserRequest request)
+        {
+            var updated = await _userService.UpdateUserAsync(
+                username,
+                request.Password,
+                request.Age,
+                request.Weight,
+                request.Location
+            );
+
+            return Ok(updated);
+        }
+
+        // Update dark mode
+        [HttpPut("{username}/darkmode")]
+        public async Task<IActionResult> UpdateDarkMode(string username, [FromBody] UpdateColourModeRequest request)
+        {
+            var updated = await _userService.UpdateColourModeAsync(username, request.DarkMode);
+            return Ok(updated);
+        }
+
+        // Delete a user
+        [HttpDelete("{username}")]
+        public async Task<IActionResult> DeleteUser(string username)
+        {
+            await _userService.DeleteUserAsync(username);
+            return Ok($"User '{username}' deleted.");
         }
 
     }
