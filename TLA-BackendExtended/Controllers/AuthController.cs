@@ -27,7 +27,6 @@ namespace TLA_BackendExtended.Controllers
         new Claim(ClaimTypes.Role, "Admin") 
     };
 
-            
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("adminSecurityKey123thisIsASuperSafeKeyOnGod"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
