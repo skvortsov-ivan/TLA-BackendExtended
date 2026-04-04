@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TLA_BackendExtended.Filters;
 
 
 
@@ -11,7 +10,7 @@ using TLA_BackendExtended.Filters;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers(options =>{options.Filters.Add<ExecutionTimeFilter>();});
+builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 // AUTHENTICATION ---------------------------------------------------
@@ -24,9 +23,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "DinApp",
-            ValidAudience = "DinFrontend",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("adminSecurityKey123"))
+            ValidIssuer = "TLA_Backend_App",
+            ValidAudience = "TLA_Frontend",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("adminSecurityKey123thisIsASuperSafeKeyOnGod"))
         };
     });
 
