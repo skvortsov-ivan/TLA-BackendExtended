@@ -18,7 +18,7 @@ namespace TLA_BackendExtended.Controllers
         }
 
         // Creates a new user
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
