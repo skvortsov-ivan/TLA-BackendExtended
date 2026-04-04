@@ -18,7 +18,6 @@ namespace TLA_BackendExtended.Controllers
         }
 
         // Creates a new user
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
@@ -73,6 +72,7 @@ namespace TLA_BackendExtended.Controllers
         }
 
         // Delete a user
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{username}")]
         public async Task<IActionResult> DeleteUser(string username)
         {
