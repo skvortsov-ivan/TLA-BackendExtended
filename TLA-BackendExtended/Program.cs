@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using TLA_BackendExtended.Services;
 using System.Text;
+using TLA_BackendExtended.Clients;
+using TLA_BackendExtended.Services;
 
 
 
@@ -14,6 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITimerService, TimerService>();
+
+// API PROXY -------------------------------------------------------
+builder.Services.AddHttpClient<IWorkoutClient, WorkoutClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5155/");
+});
 
 // AUTHENTICATION ---------------------------------------------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -25,9 +33,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "TLA_Backend_App",
-            ValidAudience = "TLA_Frontend",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("adminSecurityKey123thisIsASuperSafeKeyOnGod"))
+            ValidIssuer = "DinApp",
+            ValidAudience = "DinFrontend",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("adminSecurityKey123"))
         };
     });
 

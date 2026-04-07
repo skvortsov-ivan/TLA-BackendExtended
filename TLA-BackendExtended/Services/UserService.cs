@@ -7,6 +7,7 @@ namespace TLA_BackendExtended.Services
     public class UserService : IUserService
     {
         private static readonly List<User> _users = new();
+        private static int _nextId = 1;
 
         // Create a user
         public Task<User> CreateUserAsync(string username, string password, int age, int weight, string location, bool darkMode)
@@ -16,6 +17,7 @@ namespace TLA_BackendExtended.Services
 
             var user = new User
             {
+                Id = _nextId++,
                 Username = username,
                 Password = password,
                 Age = age,
@@ -29,13 +31,24 @@ namespace TLA_BackendExtended.Services
             return Task.FromResult(user);
         }
 
-        // Find a user
-        public Task<User> GetUserAsync(string username)
+        // Find a user by Id
+        public Task<User> GetUserByIdAsync(int id)
+        {
+            var user = _users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+                throw new UserNotFoundException($"User with ID: '{id}' not found.");
+
+            return Task.FromResult(user);
+        }
+
+        // Find a user by Username
+        public Task<User> GetUserByUsernameAsync(string username)
         {
             var user = _users.FirstOrDefault(u => u.Username.Equals(username));
 
             if (user == null)
-                throw new UserNotFoundException($"User '{username}' not found.");
+                throw new UserNotFoundException($"User with Username:'{username}' not found.");
 
             return Task.FromResult(user);
         }

@@ -18,6 +18,7 @@ namespace TLA_BackendExtended.Controllers
         }
 
         // Creates a new user
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
@@ -33,10 +34,19 @@ namespace TLA_BackendExtended.Controllers
             return Ok(user);
         }
         // Get a user by username
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetUser(string username)
+        [HttpGet("by-username/{username}")]
+        public async Task<IActionResult> GetUserByUsername(string username)
         {
-            var user = await _userService.GetUserAsync(username);
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            return Ok(user);
+        }
+
+        // Get a user by username
+        [HttpGet("by-id/{id:int}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
 
             return Ok(user);
         }

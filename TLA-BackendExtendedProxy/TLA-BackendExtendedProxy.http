@@ -1,0 +1,6 @@
+@TLA_BackendExtendedProxy_HostAddress = http://localhost:5155
+
+GET {{TLA_BackendExtendedProxy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

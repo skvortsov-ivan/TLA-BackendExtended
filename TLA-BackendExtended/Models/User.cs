@@ -9,7 +9,7 @@
 
         public int Weight { get; set; }
 
-        public string Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
         public bool DarkMode { get; set; }
         public DateTime CreatedAt { get; set; }
