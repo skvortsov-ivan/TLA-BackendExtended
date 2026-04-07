@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TLA_BackendExtended.Filters;
+using TLA_BackendExtended.Clients;
 using TLA_BackendExtended.Services;
 
 
@@ -12,9 +12,16 @@ using TLA_BackendExtended.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers(options =>{options.Filters.Add<ExecutionTimeFilter>();});
+builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITimerService, TimerService>();
+
+// API PROXY -------------------------------------------------------
+builder.Services.AddHttpClient<IWorkoutClient, WorkoutClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5155/");
+});
 
 // AUTHENTICATION ---------------------------------------------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
