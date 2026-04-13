@@ -7,15 +7,24 @@ on:
     branches: [ "master", "dev" ]
 
 jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
 
-  build:
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+        cache: true
 
-    runs-on: windows-latest
+    - name: Restore dependencies
+      run: dotnet restore
 
-    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
 
-   
+    - name: Run tests
+      run: dotnet test --configuraition Release --no-build --verbosity normal
