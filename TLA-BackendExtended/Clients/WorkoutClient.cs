@@ -6,7 +6,7 @@ namespace TLA_BackendExtended.Clients
 {
     public interface IWorkoutClient
     {
-        Task<CaloriesResponse> GetCaloriesAsync(string workout, int weight, int duration);
+        Task<CaloriesResponse> GetCaloriesAsync(string workout, int weight, int duration, IConfiguration config);
     }
 
     public class WorkoutClient : IWorkoutClient
@@ -18,9 +18,10 @@ namespace TLA_BackendExtended.Clients
             _httpClient = httpClient;
         }
 
-        public async Task<CaloriesResponse> GetCaloriesAsync(string workout, int weight, int duration)
+        public async Task<CaloriesResponse> GetCaloriesAsync(string workout, int weight, int duration, IConfiguration config)
         {
             var url = $"api/calories?activity={workout}&weight={weight}&duration={duration}";
+            _httpClient.DefaultRequestHeaders.Add("X-API-Key", config["ServiceCommunicationApiKey"]);
             var response = await _httpClient.GetFromJsonAsync<CaloriesResponse>(url);
             return response ?? new CaloriesResponse();
         }

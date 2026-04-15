@@ -15,9 +15,9 @@ namespace TLA_BackendExtended.Controllers
         }
 
         [HttpGet("calories")]
-        public async Task<IActionResult> GetCalories([FromQuery] string workout, [FromQuery] int weight, [FromQuery] int duration)
+        public async Task<IActionResult> GetCalories([FromQuery] string workout, [FromQuery] int weight, [FromQuery] int duration, [FromServices] IConfiguration config)
         {
-            var data = await _workoutClient.GetCaloriesAsync(workout, weight, duration);
+            var data = await _workoutClient.GetCaloriesAsync(workout, weight, duration, config);
             return Ok(data);
         }
     }
