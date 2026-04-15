@@ -21,7 +21,7 @@ namespace TLA_BackendExtendedProxy.Services
                 Duration = duration
             };
 
-            var results = await _client.GetCaloriesAsync(request);
+            var results = await _client.FetchCaloriesAsync(request);
 
             var result = results.FirstOrDefault() ?? new CaloriesResponseDto();
 

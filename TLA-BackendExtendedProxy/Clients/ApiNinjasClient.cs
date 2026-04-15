@@ -17,7 +17,7 @@ namespace TLA_BackendExtendedProxy.Clients
             _config = config;
         }
 
-        public async Task<List<CaloriesResponseDto>> GetCaloriesAsync(CaloriesRequestDto request)
+        public async Task<List<CaloriesResponseDto>> FetchCaloriesAsync(CaloriesRequestDto request)
         {
             _http.DefaultRequestHeaders.Add("X-Api-Key", _config["ApiNinjas:ApiKey"]);
 
