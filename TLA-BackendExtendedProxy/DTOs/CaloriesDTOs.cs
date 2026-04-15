@@ -2,10 +2,10 @@
 
 namespace TLA_BackendExtendedProxy.DTOs
 {
-    public class CaloriesBurnedDto
+    public record CaloriesResponseDto
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("exercise_category")]
+        public string WorkoutCategory { get; set; } = string.Empty;
 
         [JsonPropertyName("calories_per_hour")]
         public int CaloriesPerHour { get; set; }
@@ -15,5 +15,14 @@ namespace TLA_BackendExtendedProxy.DTOs
 
         [JsonPropertyName("total_calories")]
         public int TotalCalories { get; set; }
+    }
+
+    public record CaloriesRequestDto
+    {
+        public string WorkoutCategory { get; set; } = string.Empty;
+
+        public int Weight { get; set; }
+
+        public int Duration { get; set; }
     }
 }

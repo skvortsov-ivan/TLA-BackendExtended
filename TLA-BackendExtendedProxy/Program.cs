@@ -1,14 +1,16 @@
+using TLA_BackendExtendedProxy.Clients;
 using TLA_BackendExtendedProxy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers + Swagger
 builder.Services.AddControllers();
+
+builder.Services.AddHttpClient<ApiNinjasClient>();
+
+builder.Services.AddScoped<ICaloriesService, CaloriesService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// HttpClient for calling API Ninjas
-builder.Services.AddHttpClient<ICaloriesService, CaloriesService>();
 
 var app = builder.Build();
 
@@ -20,4 +22,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
 app.Run();
+

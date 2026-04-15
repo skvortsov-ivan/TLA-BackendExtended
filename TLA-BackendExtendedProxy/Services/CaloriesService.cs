@@ -1,35 +1,33 @@
-﻿using System.Net.Http.Json;
+﻿using TLA_BackendExtendedProxy.Clients;
 using TLA_BackendExtendedProxy.DTOs;
 
 namespace TLA_BackendExtendedProxy.Services
 {
-
     public class CaloriesService : ICaloriesService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _config;
+        private readonly ApiNinjasClient _client;
 
-        public CaloriesService(HttpClient httpClient, IConfiguration config)
+        public CaloriesService(ApiNinjasClient client)
         {
-            _httpClient = httpClient;
-            _config = config;
+            _client = client;
         }
 
-        public async Task<List<CaloriesBurnedDto>> GetCaloriesAsync(string activity, int weight, int duration)
+        public async Task<CaloriesResponseDto> GetCaloriesAsync(string workout, int weight, int duration)
         {
-            var apiKey = _config["ApiNinjas:ApiKey"];
+            var request = new CaloriesRequestDto
+            {
+                WorkoutCategory = workout,
+                Weight = weight,
+                Duration = duration
+            };
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.api-ninjas.com/v1/caloriesburned?activity={activity}&weight={weight}&duration={duration}"
-            );
+            var results = await _client.GetCaloriesAsync(request);
 
-            request.Headers.Add("X-Api-Key", apiKey);
+            var result = results.FirstOrDefault() ?? new CaloriesResponseDto();
 
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            result.WorkoutCategory = workout;
 
-            var result = await response.Content.ReadFromJsonAsync<List<CaloriesBurnedDto>>();
-            return result ?? new List<CaloriesBurnedDto>();
+            return result;
         }
     }
 }
-
