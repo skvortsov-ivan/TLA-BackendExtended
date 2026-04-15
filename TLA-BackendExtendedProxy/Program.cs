@@ -1,4 +1,5 @@
 using TLA_BackendExtendedProxy.Clients;
+using TLA_BackendExtendedProxy.Middlewares;
 using TLA_BackendExtendedProxy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ApiKeyMiddleware>();
 app.MapControllers();
 
 app.Run();
