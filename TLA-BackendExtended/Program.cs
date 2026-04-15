@@ -20,7 +20,7 @@ builder.Services.AddScoped<ITimerService, TimerService>();
 // API PROXY -------------------------------------------------------
 builder.Services.AddHttpClient<IWorkoutClient, WorkoutClient>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5155/");
+    client.BaseAddress = new Uri("https://localhost:7194/");
 });
 
 // AUTHENTICATION ---------------------------------------------------

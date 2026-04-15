@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TLA_BackendExtendedProxy.Services;
+using TLA_BackendExtendedProxy.DTOs;
 
 namespace TLA_BackendExtendedProxy.Controllers
 {
@@ -16,11 +17,12 @@ namespace TLA_BackendExtendedProxy.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetCalories(
-            [FromQuery] string activity,
+            [FromQuery(Name = "activity")] string workout,
             [FromQuery] int weight,
             [FromQuery] int duration)
         {
-            var result = await _service.GetCaloriesAsync(activity, weight, duration);
+            var result = await _service.GetCaloriesAsync(workout, weight, duration);
+            
             return Ok(result);
         }
     }
