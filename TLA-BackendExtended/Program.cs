@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TLA_BackendExtended.Clients;
+using TLA_BackendExtended.Middlewares;
 using TLA_BackendExtended.Services;
 
 
@@ -57,6 +58,7 @@ builder.Services.AddCors(options =>
 //▄▀█ █▀█ █▀█
 //█▀█ █▀▀ █▀▀
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
