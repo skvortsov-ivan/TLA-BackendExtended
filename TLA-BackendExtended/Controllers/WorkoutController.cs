@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TLA_BackendExtended.Clients;
+using TLA_BackendExtended.Services;
 
 namespace TLA_BackendExtended.Controllers
 {
@@ -7,19 +7,18 @@ namespace TLA_BackendExtended.Controllers
     [Route("api/workouts")]
     public class WorkoutController : ControllerBase
     {
-        private readonly IWorkoutClient _workoutClient;
+        private readonly IWorkoutService _service;
 
-        public WorkoutController(IWorkoutClient workoutClient)
+        public WorkoutController(IWorkoutService service)
         {
-            _workoutClient = workoutClient;
+            _service = service;
         }
 
         [HttpGet("calories")]
-        public async Task<IActionResult> GetCalories([FromQuery] string workout, [FromQuery] int weight, [FromQuery] int duration, [FromServices] IConfiguration config)
+        public async Task<IActionResult> GetCalories([FromQuery] string workout, [FromQuery] int weight,[FromQuery] int duration)
         {
-            var data = await _workoutClient.GetCaloriesAsync(workout, weight, duration, config);
-            return Ok(data);
+            var model = await _service.GetCaloriesAsync(workout, weight, duration);
+            return Ok(model);
         }
     }
 }
-

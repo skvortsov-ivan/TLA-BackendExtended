@@ -16,6 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITimerService, TimerService>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+
 
 // API PROXY -------------------------------------------------------
 builder.Services.AddHttpClient<IWorkoutClient, WorkoutClient>(client =>
