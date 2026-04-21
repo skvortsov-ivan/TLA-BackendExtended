@@ -23,10 +23,9 @@ namespace TLA_BackendExtended.Tests
         }
 
         [Fact]
-        public async Task CreateUser_WithMockedAuth_Returns_Ok()
+        public async Task DeleteUser_WithAdminAuth_Returns_Ok()
         {
-
-            // ARRANGE - Client with fake authentication
+            // ARRANGE - Client with fake Admin authentication
             var client = _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -43,41 +42,37 @@ namespace TLA_BackendExtended.Tests
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("TestScheme");
 
-
-            // ACT — Create user
-            var createResponse = await client.PostAsJsonAsync("/api/users", new
+            // Create user to be deleted
+            await client.PostAsJsonAsync("/api/users", new
             {
-                username = "ivan123",
-                password = "ivan123",
-                age = 31,
-                weight = 75,
-                location = "Stockholm",
-                darkMode = true
-            });
-
-            // ASSERT — Ok Http Status
-            Assert.Equal(HttpStatusCode.OK, createResponse.StatusCode);
-        }
-
-        [Fact]
-        public async Task CreateUser_WithoutAuth_Returns_Unauthorized()
-        {
-            // ARRANGE - Endpoint
-            var url = "/api/users";
-
-            // ACT - Create user
-            var response = await _client.PostAsJsonAsync(url, new
-            {
-                Username = "melvin123",
-                Password = "melvin123",
-                Age = 24,
+                Username = "ivan123",
+                Password = "ivan123",
+                Age = 31,
                 Weight = 75,
                 Location = "Stockholm",
                 DarkMode = true
             });
 
+            // ACT - Delete user
+            var response = await client.DeleteAsync("/api/users/ivan123");
+
+            // ASSERT - Ok
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task DeleteUser_WithoutAuth_Returns_Unauthorized()
+        {
+            // ARRANGE - Endpoint
+            var url = "/api/users/ivan123";
+
+            // ACT - Delete attempt
+            var response = await _client.DeleteAsync(url);
+
             // ASSERT - Unauthorized
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
+
     }
 }

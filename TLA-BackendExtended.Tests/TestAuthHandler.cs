@@ -17,7 +17,11 @@ namespace TLA_BackendExtended.Tests
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             // Creating a false identity
-            var claims = new[] { new Claim(ClaimTypes.Name, "Test User") };
+            var claims = new[]
+{
+            new Claim(ClaimTypes.Name, "AdminUser"),
+            new Claim(ClaimTypes.Role, "Admin")
+        };
             var identity = new ClaimsIdentity(claims, "TestScheme");
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, "TestScheme");
