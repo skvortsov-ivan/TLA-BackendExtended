@@ -27,7 +27,7 @@ jobs:
       run: ls
     #---
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --verbosity detailed #Test - Added verbosity detailed
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
