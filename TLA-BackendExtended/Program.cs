@@ -4,7 +4,9 @@ using System.Text;
 using TLA_BackendExtended.Clients;
 using TLA_BackendExtended.Middlewares;
 using TLA_BackendExtended.Services;
-
+using Microsoft.AspNetCore.RateLimiting; 
+using System.Threading.RateLimiting;
+using Scalar.AspNetCore;
 
 
 //█▄▄ █░█ █ █░░ █▀▄ █▀▀ █▀█
@@ -14,10 +16,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITimerService, TimerService>();
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+
+//  Rate Limiting 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter(policyName: "fixed", fixedOptions =>
+    {
+        fixedOptions.PermitLimit = 10; 
+        fixedOptions.Window = TimeSpan.FromSeconds(10); 
+        fixedOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        fixedOptions.QueueLimit = 2; 
+});
+    });
+
+// (Caching) 
+builder.Services.AddMemoryCache();
 
 
 // API PROXY -------------------------------------------------------
@@ -59,9 +76,15 @@ builder.Services.AddCors(options =>
 //█▀█ █▀▀ █▀▀
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseSwagger();
-app.UseSwaggerUI();
+
+//  Scalar instead of Swagger
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 app.UseHttpsRedirection();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("MainCorsPolicy");

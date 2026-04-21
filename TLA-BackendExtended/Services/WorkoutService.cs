@@ -1,5 +1,4 @@
-﻿
-using TLA_BackendExtended.Clients;
+﻿using TLA_BackendExtended.Clients;
 using TLA_BackendExtended.Models;
 
 namespace TLA_BackendExtended.Services
@@ -12,6 +11,22 @@ namespace TLA_BackendExtended.Services
         {
             _client = client;
         }
+
+        
+        public async Task<IEnumerable<Workout>> GetAllWorkoutsAsync()
+        {
+           
+            var workouts = new List<Workout>
+            {
+                new Workout { Name = "Running", Category = "Cardio" },
+                new Workout { Name = "Weightlifting", Category = "Strength" },
+                new Workout { Name = "Swimming", Category = "Cardio" },
+                new Workout { Name = "Yoga", Category = "Flexibility" }
+            };
+
+            return await Task.FromResult(workouts);
+        }
+        // ------------------------------------------------
 
         public async Task<WorkoutCalories> GetCaloriesAsync(string workout, int weight, int duration)
         {
@@ -27,4 +42,3 @@ namespace TLA_BackendExtended.Services
         }
     }
 }
-

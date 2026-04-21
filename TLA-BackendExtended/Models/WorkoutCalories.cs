@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
+
 namespace TLA_BackendExtended.Models
 {
     public class WorkoutCalories
