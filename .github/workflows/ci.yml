@@ -19,7 +19,13 @@ jobs:
       with:
         dotnet-version: 10.0.x
         cache: false
+    #--- Test
+    - name: Show working directory
+      run: pwd
 
+    - name: List files
+      run: ls
+    #---
     - name: Restore dependencies
       run: dotnet restore
 
