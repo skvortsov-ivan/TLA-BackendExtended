@@ -1,5 +1,5 @@
 1   <Solution>
-2 -   <Project Path="TLA-BackendExtended/TLA-BackendExtended.csproj" />
-3 -   <Project Path="TLA-BackendExtendedProxy/TLA-BackendExtendedProxy.csproj"
+2     <Project Path="TLA-BackendExtended/TLA-BackendExtended.csproj" />
+3     <Project Path="TLA-BackendExtendedProxy/TLA-BackendExtendedProxy.csproj"
       Id="0245bbf3-5e0c-4065-987d-3dd8785e0230" />
 4   </Solution>
