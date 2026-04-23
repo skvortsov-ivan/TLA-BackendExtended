@@ -13,6 +13,16 @@ builder.Services.AddHttpClient<ApiNinjasClient>();
 
 builder.Services.AddScoped<ICaloriesService, CaloriesService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ServiceBCorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

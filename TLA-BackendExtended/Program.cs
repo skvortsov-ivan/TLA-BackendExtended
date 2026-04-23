@@ -44,7 +44,7 @@ builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddHttpClient<IWorkoutClient, WorkoutClient>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7194/");
-});
+}).AddStandardResilienceHandler();
 
 // AUTHENTICATION ---------------------------------------------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -65,7 +65,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // CORS POLICY ------------------------------------------------------
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MainCorsPolicy", policy =>
+    options.AddPolicy("ServiceACorsPolicy", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
