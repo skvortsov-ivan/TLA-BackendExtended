@@ -41,16 +41,17 @@ namespace TLA_BackendExtended.DTOs
         string Location
     );
 
+    // V2 Response for viewing user information
     public record UserInformationResponseV2
     {
-        public int Id { get; init; }
-        public string Username { get; init; } = string.Empty;
-        public int Age { get; init; }
-        public int Weight { get; init; }
-        public string Location { get; init; } = string.Empty;
-
-        // V2-specific field
-        public string DisplayName { get; init; } = string.Empty;
+        public int Id { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public int Weight { get; set; }
+        public string Location { get; set; } = string.Empty;
+        
+        // V2
+        public string DisplayName { get; set; } = string.Empty;
     }
 
 

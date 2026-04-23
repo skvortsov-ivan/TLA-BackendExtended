@@ -38,13 +38,19 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITimerService, TimerService>();
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
-
+builder.Services.AddScoped<IBobService, BobService>();
 
 // API PROXY -------------------------------------------------------
 builder.Services.AddHttpClient<IWorkoutClient, WorkoutClient>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7194/");
 }).AddStandardResilienceHandler();
+
+builder.Services.AddHttpClient<IAiBobClient, AiBobClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7194/");
+}).AddStandardResilienceHandler();
+
 
 // AUTHENTICATION ---------------------------------------------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
