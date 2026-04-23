@@ -1,7 +1,7 @@
-using System.Net.Http.Headers;
 using TLA_BackendExtendedProxy.Clients;
 using TLA_BackendExtendedProxy.Middlewares;
 using TLA_BackendExtendedProxy.Services;
+using TLA_BackendExtendedProxy.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient<ApiNinjasClient>();
 
 builder.Services.AddScoped<ICaloriesService, CaloriesService>();
+builder.Services.AddScoped<IOllamaService, OllamaService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
