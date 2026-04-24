@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TLA_BackendExtendedProxy.Services;
 using TLA_BackendExtendedProxy.DTOs;
 
@@ -21,8 +21,14 @@ namespace TLA_BackendExtendedProxy.Controllers
             [FromQuery] int weight,
             [FromQuery] int duration)
         {
-            var result = await _service.GetCaloriesAsync(workout, weight, duration);
-            
+           
+            var result = await _service.GetCaloriesAsync(new CaloriesRequestDto
+            {
+                WorkoutCategory = workout,
+                Weight = weight,
+                Duration = duration
+            });
+
             return Ok(result);
         }
     }

@@ -4,6 +4,7 @@ namespace TLA_BackendExtendedProxy.Services
 {
     public interface ICaloriesService
     {
-        Task<CaloriesResponseDto> GetCaloriesAsync(string workout, int weight, int duration);
+        
+        Task<CaloriesResponseDto> GetCaloriesAsync(CaloriesRequestDto request);
     }
 }
