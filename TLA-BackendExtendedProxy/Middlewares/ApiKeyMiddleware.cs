@@ -3,7 +3,7 @@
     public class ApiKeyMiddleware
     {
         private readonly RequestDelegate _next;
-        private const string APIKEYNAME = "X-API-KEY";
+        private const string APIKEYNAME = "ServiceCommunicationApiKey";
 
 
         public ApiKeyMiddleware(RequestDelegate next)

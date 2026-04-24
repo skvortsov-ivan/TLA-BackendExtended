@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TLA_BackendExtended.DTOs;
 using TLA_BackendExtended.Services;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -74,7 +75,14 @@ namespace TLA_BackendExtended.Controllers
             [FromQuery] int weight,
             [FromQuery] int duration)
         {
-            var model = await _service.GetCaloriesAsync(workout, weight, duration);
+            var request = new CaloriesRequestDTO
+            {
+                WorkoutCategory = workout,
+                Weight = weight,
+                Duration = duration
+            };
+
+            var model = await _service.GetCaloriesAsync(request);
             return Ok(model);
         }
     }

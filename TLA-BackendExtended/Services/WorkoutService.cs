@@ -1,5 +1,6 @@
 ﻿using TLA_BackendExtended.Clients;
 using TLA_BackendExtended.Models;
+using TLA_BackendExtended.DTOs;
 
 namespace TLA_BackendExtended.Services
 {
@@ -28,9 +29,9 @@ namespace TLA_BackendExtended.Services
         }
         // ------------------------------------------------
 
-        public async Task<WorkoutCalories> GetCaloriesAsync(string workout, int weight, int duration)
+        public async Task<WorkoutCalories> GetCaloriesAsync(CaloriesRequestDTO request)
         {
-            var model = await _client.FetchCaloriesAsync(workout, weight, duration);
+            var model = await _client.FetchCaloriesAsync(request);
 
             return new WorkoutCalories
             {
