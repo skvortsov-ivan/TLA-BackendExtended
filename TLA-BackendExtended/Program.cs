@@ -68,7 +68,7 @@ builder.Services.AddRateLimiter(options =>
     {
         config.Window = TimeSpan.FromMinutes(1);
         config.SegmentsPerWindow = 6;
-        config.PermitLimit = 10;
+        config.PermitLimit = 2;
     });
 });
 

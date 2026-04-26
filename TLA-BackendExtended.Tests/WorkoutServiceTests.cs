@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
@@ -39,8 +41,14 @@ namespace TLA_BackendExtended.Tests
                     TotalCaloriesBurned = 150
                 });
 
+            // Adding Hybrid cache into
+            var services = new ServiceCollection();
+            services.AddHybridCache();
+            var provider = services.BuildServiceProvider();
 
-            var service = new WorkoutService(mockClient.Object);
+            var cache = provider.GetRequiredService<HybridCache>();
+            var service = new WorkoutService(mockClient.Object, cache);
+
 
             // ACT - Call service for DTO maping to the Workout calories model
             var result = await service.GetCaloriesAsync(request);
