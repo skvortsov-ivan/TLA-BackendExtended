@@ -18,50 +18,7 @@ namespace TLA_BackendExtended.Controllers
             _service = service;
         }
 
-        /// <summary>
-        /// Retrieves a list of workouts with filtering and pagination.
-        /// </summary>
-        /// <param name="category">Filter by workout category (e.g., Cardio, Strength).</param>
-        /// <param name="search">Search by workout name.</param>
-        /// <param name="page">The page number to retrieve (Default is 1).</param>
-        /// <param name="pageSize">The number of items per page (Default is 10).</param>
-        /// <returns>A paged list of workouts and total count.</returns>
-        [HttpGet]
-        public async Task<IActionResult> GetWorkouts(
-            [FromQuery] string? category,
-            [FromQuery] string? search,
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
-        {
-            // Fetching all data from service
-            var allWorkouts = await _service.GetAllWorkoutsAsync();
-
-            // Creating a queryable object for filtering
-            var query = allWorkouts.AsQueryable();
-
-            // Applying Filters
-            if (!string.IsNullOrEmpty(category))
-                query = query.Where(w => w.Category == category);
-
-            if (!string.IsNullOrEmpty(search))
-                query = query.Where(w => w.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
-
-            // Applying Pagination (Epic 5)
-            var pagedData = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            // Returning the structured response
-            return Ok(new
-            {
-                TotalCount = query.Count(),
-                Page = page,
-                PageSize = pageSize,
-                Data = pagedData
-            });
-        }
-
+        // 
         /// <summary>
         /// Calculates calories burned for a specific workout based on user weight and duration.
         /// </summary>
@@ -75,7 +32,8 @@ namespace TLA_BackendExtended.Controllers
             [FromQuery] int weight,
             [FromQuery] int duration)
         {
-            var request = new CaloriesRequestDTO
+            // 
+            var request = new CaloriesRequestDto
             {
                 WorkoutCategory = workout,
                 Weight = weight,

@@ -1,39 +1,33 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using TLA_BackendExtendedProxy.Clients;
+﻿using TLA_BackendExtendedProxy.Clients;
 using TLA_BackendExtendedProxy.DTOs;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace TLA_BackendExtendedProxy.Services
 {
     public class CaloriesService : ICaloriesService
     {
         private readonly ApiNinjasClient _client;
-        private readonly IMemoryCache _cache;
+        private readonly HybridCache _cache;
 
-        public CaloriesService(ApiNinjasClient client, IMemoryCache cache)
+        public CaloriesService(ApiNinjasClient client, HybridCache cache)
         {
             _client = client;
             _cache = cache;
         }
 
-       
         public async Task<CaloriesResponseDto> GetCaloriesAsync(CaloriesRequestDto request)
         {
             string cacheKey = $"calories_{request.WorkoutCategory}_{request.Weight}_{request.Duration}";
 
-            if (!_cache.TryGetValue(cacheKey, out CaloriesResponseDto? cachedResult))
+          
+            return await _cache.GetOrCreateAsync(cacheKey, async cancel =>
             {
                 var results = await _client.FetchCaloriesAsync(request);
                 var result = results.FirstOrDefault() ?? new CaloriesResponseDto();
 
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(30))
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-                _cache.Set(cacheKey, result, cacheOptions);
-
+               
                 return result;
-            }
-            return cachedResult!;
+            });
         }
     }
 }

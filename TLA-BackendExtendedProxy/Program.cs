@@ -28,6 +28,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddMemoryCache();
 
+builder.Services.AddHybridCache();
+
 var app = builder.Build();
 
 
@@ -39,7 +41,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.UseCors("ServiceBCorsPolicy");
 app.UseMiddleware<ApiKeyMiddleware>();
 
 app.MapControllers();

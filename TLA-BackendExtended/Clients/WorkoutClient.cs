@@ -6,7 +6,7 @@ namespace TLA_BackendExtended.Clients
 {
     public interface IWorkoutClient
     {
-        Task<CaloriesResponse> FetchCaloriesAsync(CaloriesRequestDTO request);
+        Task<CaloriesResponse> FetchCaloriesAsync(CaloriesRequestDto request);
     }
 
     public class WorkoutClient : IWorkoutClient
@@ -20,10 +20,16 @@ namespace TLA_BackendExtended.Clients
             _config = config;
         }
 
-        public async Task<CaloriesResponse> FetchCaloriesAsync(CaloriesRequestDTO request)
+        public async Task<CaloriesResponse> FetchCaloriesAsync(CaloriesRequestDto request)
         {
-            var url = $"api/calories?activity={request.WorkoutCategory}"+$"&weight={request.Weight}"+$"&duration={request.Duration}";
-            _httpClient.DefaultRequestHeaders.Add("ServiceCommunicationApiKey", _config["ServiceCommunicationApiKey"]);
+            var url = $"api/calories?activity={request.WorkoutCategory}&weight={request.Weight}&duration={request.Duration}";
+
+            // 
+            if (!_httpClient.DefaultRequestHeaders.Contains("ServiceCommunicationApiKey"))
+            {
+                _httpClient.DefaultRequestHeaders.Add("ServiceCommunicationApiKey", _config["ServiceCommunicationApiKey"]);
+            }
+
             var response = await _httpClient.GetFromJsonAsync<CaloriesResponse>(url);
             return response ?? new CaloriesResponse();
         }
