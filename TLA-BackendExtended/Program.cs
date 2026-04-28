@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using Scalar.AspNetCore;
 using System.Text;
 using TLA_BackendExtended.Clients;
 using TLA_BackendExtended.Middlewares;
@@ -19,24 +20,26 @@ var builder = WebApplication.CreateBuilder(args);
 // CONTROLLERS ---------------------------------------------------------
 builder.Services.AddControllers();
 
-// AUTHENTICATION BUTTON ---------------------------------------------------------
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Klistra in din JWT-token här!"
-    });
+builder.Services.AddOpenApi();
 
-    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
-    {
-        [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
-    });
-});
+// AUTHENTICATION BUTTON ---------------------------------------------------------
+//builder.Services.AddSwaggerGen(options =>
+//{
+//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+//    {
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.Http,
+//        Scheme = "bearer",
+//        BearerFormat = "JWT",
+//        In = ParameterLocation.Header,
+//        Description = "Klistra in din JWT-token här!"
+//    });
+
+//    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+//    {
+//        [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
+//    });
+//});
 
 // SERVICES ---------------------------------------------------------
 builder.Services.AddScoped<IUserService, UserService>();
@@ -135,8 +138,9 @@ builder.Services.AddApiVersioning(options =>
 //█▀█ █▀▀ █▀▀
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseSwagger();
-app.UseSwaggerUI();
+app.MapOpenApi();
+app.MapScalarApiReference();
+
 app.UseHttpsRedirection();
 app.UseRateLimiter();
 app.UseAuthentication();
