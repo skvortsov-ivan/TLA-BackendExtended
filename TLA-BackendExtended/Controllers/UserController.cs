@@ -18,7 +18,18 @@ namespace TLA_BackendExtended.Controllers
             _userService = userService;
         }
 
-        // Creates a new user
+        /// <summary>
+        /// Creates a new user in the system.
+        /// </summary>
+        /// <param name="request">
+        /// Contains user information such as username, password, age, weight, location, and preferences.
+        /// </param>
+        /// <returns>
+        /// Returns the created user if the operation is successful.
+        /// </returns>
+        /// <response code="200">User was successfully created.</response>
+        /// <response code="400">Invalid request data.</response>
+        /// <response code="500">An unexpected error occurred.</response>
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
