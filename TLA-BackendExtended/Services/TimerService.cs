@@ -1,4 +1,5 @@
-﻿using TLA_BackendExtended.Exceptions;
+﻿using TLA_BackendExtended.DTOs;
+using TLA_BackendExtended.Exceptions;
 using TLA_BackendExtended.Models;
 using TimerModel = TLA_BackendExtended.Models.Timer;
 
@@ -97,10 +98,29 @@ namespace TLA_BackendExtended.Services
             return Task.FromResult(timer);
         }
 
-        // Get all timers
-        public Task<List<TimerModel>> GetAllTimersAsync()
+        // Get paged timers
+        public async Task<PagedResponse<TimerResponse>> GetPagedTimersAsync(int page, int pageSize)
         {
-            return Task.FromResult(_timers.ToList());
+            await Task.Delay(20);
+
+            var totalCount = _timers.Count;
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            var items = _timers
+                .OrderByDescending(t => t.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(t => new TimerResponse(
+                    t.Id,
+                    t.TimeInterval,
+                    t.Category,
+                    t.CreatedAt
+                ))
+                .ToList();
+
+            var meta = new PaginationMeta(page, pageSize, totalPages, totalCount, page < totalPages, page > 1);
+
+            return new PagedResponse<TimerResponse>(items, meta);
         }
     }
 }

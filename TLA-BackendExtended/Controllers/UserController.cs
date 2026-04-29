@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using TLA_BackendExtended.DTOs;
@@ -17,7 +18,18 @@ namespace TLA_BackendExtended.Controllers
             _userService = userService;
         }
 
-        // Creates a new user
+        /// <summary>
+        /// Creates a new user in the system.
+        /// </summary>
+        /// <param name="request">
+        /// Contains user information such as username, password, age, weight, location, and preferences.
+        /// </param>
+        /// <returns>
+        /// Returns the created user if the operation is successful.
+        /// </returns>
+        /// <response code="200">User was successfully created.</response>
+        /// <response code="400">Invalid request data.</response>
+        /// <response code="500">An unexpected error occurred.</response>
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
@@ -41,14 +53,38 @@ namespace TLA_BackendExtended.Controllers
             return Ok(user);
         }
 
-        // Get a user by username
-        [HttpGet("by-id/{id:int}")]
-        public async Task<IActionResult> GetUserById(int id)
+        // Get a user by id V1
+        [HttpGet("by-id/{id:int}/V1")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetUserByIdV1(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
 
             return Ok(user);
         }
+
+        // Get a user by id V2
+        [HttpGet("by-id/{id:int}/V2")]
+        [MapToApiVersion("2.0")]
+        public async Task<IActionResult> GetUserByIdV2(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+
+            var upgraded = new UserInformationResponseV2
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Age = user.Age,
+                Weight = user.Weight,
+                Location = user.Location,
+                DisplayName = $"{user.Username}#{user.Id}"
+            };
+
+            return Ok(upgraded);
+        }
+
+
+
         // Get all users
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()

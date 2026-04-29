@@ -60,12 +60,17 @@ namespace TLA_BackendExtended.Controllers
             return Ok(timer);
         }
 
-        // Get all timers
-        [HttpGet]
-        public async Task<IActionResult> GetAllTimers()
+        // Get paged timers
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedTimers(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 5)
         {
-            var timers = await _timerService.GetAllTimersAsync();
-            return Ok(timers);
+            pageSize = Math.Clamp(pageSize, 1, 50);
+
+            var response = await _timerService.GetPagedTimersAsync(page, pageSize);
+            return Ok(response);
         }
+
     }
 }

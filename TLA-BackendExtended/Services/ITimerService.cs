@@ -1,4 +1,5 @@
 ﻿using TLA_BackendExtended.Models;
+using TLA_BackendExtended.DTOs;
 using TimerModel = TLA_BackendExtended.Models.Timer;
 
 namespace TLA_BackendExtended.Services
@@ -10,7 +11,7 @@ namespace TLA_BackendExtended.Services
         Task<TimerModel> UpdateTimerAsync(int id, decimal timeInterval, string category);
         Task DeleteTimerAsync(int id);
         Task<TimerModel> GetLatestTimerAsync();
-        Task<List<TimerModel>> GetAllTimersAsync();
+        Task<PagedResponse<TimerResponse>> GetPagedTimersAsync(int page, int pageSize);
     }
 }
 
