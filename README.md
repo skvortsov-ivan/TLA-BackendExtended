@@ -2,7 +2,9 @@
 An ASP.NET Core Web API built as a practical environment for learning and applying modern backend development techniques.  
 The project focuses on clean architecture, validation, caching and external API integration with both JWT bearer token and API key.
 
-![CI Status](https://github.com/skvortsov-ivan/TLA-BackendExtended/blob/dev/.github/workflows/ci.yml/badge.svg)
+![CI](https://github.com/skvortsov-ivan/TLA-BackendExtended/actions/workflows/ci.yml/badge.svg)
+![codecov](https://codecov.io/gh/skvortsov-ivan/TLA-BackendExtended/branch/dev/graph/badge.svg)
+
 
 ## Overview
 TLA‑BackendExtended is a backend‑only project created to practice real‑world API development patterns.  
