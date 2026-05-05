@@ -26,22 +26,31 @@ Dependency Injection is used throughout the project to ensure modularity and tes
 In‑memory caching is used to improve performance and reduce latency.  
 ProblemDetails is used to provide standardized error responses.
 
-## Arkitektur och Systemstabilitet
+## Architecture and System Stability
 
 ### Custom Exception Middleware
-För att säkerställa en enhetlig och professionell felhantering använder projektet ett anpassat **Exception Middleware**. Istället för att exponera känsliga stack traces, fångar detta middleware upp alla ohanterade undantag globalt och mappar dem till standardiserade **Problem Details** (enligt RFC 7807). Detta innebär att klienten alltid får ett konsekvent svar med korrekt HTTP-statuskod (t.ex. 404 för saknat innehåll eller 502/504 för externa tjänstefel) oavsett var i applikationen felet uppstår.
+To ensure uniform and professional error handling, the project utilizes a custom **Exception Middleware**. Instead of exposing sensitive stack traces, this middleware intercepts all unhandled exceptions globally and maps them to standardized **Problem Details** (in accordance with RFC 7807). 
+
+This ensures that the client always receives a consistent response with the appropriate HTTP status code—such as **404** for missing content or **502/504** for external service failures—regardless of where the error occurs within the application.
+
+---
 
 ### Resilience Patterns
-Applikationen kommunicerar med externa API:er (såsom AI-tjänster och kaloriberäkning) via HTTP-klienter som är förstärkta med en **Standard Resilience Handler**. Genom att integrera resiliensmönster hanteras fel proaktivt:
-* **Retry Policy:** Försöker automatiskt igen vid temporära nätverksfel.
-* **Circuit Breaker:** Bryter anropen tillfälligt om en extern tjänst ligger nere för att spara resurser och förhindra "cascading failures".
-* **Timeout:** Säkerställer att systemet inte hänger sig i väntan på svar som dröjer för länge.
+The application communicates with external APIs (such as AI services and calorie calculation engines) via HTTP clients hardened with a **Standard Resilience Handler**. By integrating resilience patterns, the system manages potential failures proactively:
 
-### Avancerad Caching med HybridCache
-För att maximera prestanda och minimera onödiga externa API-anrop används .NET:s nya **HybridCache**. Denna lösning fungerar som ett intelligent lager mellan applikationen och datakällorna:
-* **Cache-aside mönster:** Vid en förfrågan kontrolleras först cachen. Vid en "Cache Miss" hämtas data från källan och sparas sedan för framtida bruk.
-* **Hybrid-ansats:** Kombinerar snabbheten i L1-cache (in-memory) med robustheten i L2-cache (distribuerad), vilket minskar latens avsevärt vid återkommande anrop.
-* **Prestandamonitorering:** Systemet loggar svarstider för att påvisa prestandavinsten mellan en "Cache Hit" och en "Cache Miss".
+* **Retry Policy:** Automatically retries requests during transient network errors.
+* **Circuit Breaker:** Temporarily halts requests if an external service is down to conserve resources and prevent "cascading failures."
+* **Timeout:** Ensures the system does not hang indefinitely while waiting for a delayed response.
+
+---
+
+### Advanced Caching with HybridCache
+To maximize performance and minimize unnecessary external API calls, the system implements .NET’s new **HybridCache**. This solution acts as an intelligent layer between the application and its data sources:
+
+* **Cache-aside Pattern:** Upon a request, the system first checks the cache. On a "Cache Miss," data is fetched from the source and then stored for future use.
+* **Hybrid Approach:** Combines the lightning speed of **L1 caching** (in-memory) with the robustness of **L2 caching** (distributed), significantly reducing latency for recurring requests.
+* **Performance Monitoring:** The system logs response times to demonstrate the performance gains achieved between a "Cache Hit" and a "Cache Miss."
+  
 ## User Secrets Setup
 The project integrates with external APIs, you may need to configure API keys using the .NET user‑secrets system.  
 If authentication is added, a JWT signing key may also be required.
